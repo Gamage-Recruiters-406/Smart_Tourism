@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import hotelRoutes from './routes/hotelRoutes.js';
 
 
 // Configure environment
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 
 // Routes
+app.use('/api/hotels', hotelRoutes);
 
 
 // Default Route
