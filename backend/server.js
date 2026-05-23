@@ -4,38 +4,38 @@ import connectDB from './config/db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import hotelRoutes from './routes/hotelRoutes.js';
+// Routes
+import userRoutes from "./routes/userRoutes.js";
 
-
-// Configure environment
+// Config
 dotenv.config();
-
-// Database config
 connectDB();
 
 const app = express();
 
-// Middlewares
+
+// ================= MIDDLEWARES =================
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 app.use(cookieParser());
 
 
 // Routes
+app.use("/api/v1/users", userRoutes);
 app.use('/api/hotels', hotelRoutes);
 
-
-// Default Route
+// ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
-  res.send({
-    message: "Welcome to Smart Tourism",
+  res.status(200).send({
+    message: "Welcome to Smart Tourism API",
   });
 });
 
 
-// Server Listener
+// ================= SERVER =================
 const PORT = process.env.PORT || 8085;
 
 app.listen(PORT, () => {
-  console.log(`Server Running on ${process.env.DEV_MODE} mode`.bgCyan.white);
-  console.log(`Server is running on port ${PORT}`.bgCyan.white);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Mode: ${process.env.DEV_MODE}`);
 });
