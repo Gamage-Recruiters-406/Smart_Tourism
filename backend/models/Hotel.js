@@ -27,6 +27,11 @@ const hotelSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     destinationId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Destination",
