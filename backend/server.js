@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import hotelRoutes from './routes/hotelRoutes.js';
 // Routes
 import userRoutes from "./routes/userRoutes.js";
+import destinationRoutes from './routes/destinationRoutes.js';
 
 // Config
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/v1/users", userRoutes);
 app.use('/api/hotels', hotelRoutes);
+app.use('/api/v1/destinations', destinationRoutes);
 
 // ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
