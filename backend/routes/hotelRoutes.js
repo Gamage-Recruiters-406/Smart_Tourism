@@ -6,10 +6,15 @@ import {
   updateHotel,
   deleteHotel,
 } from "../controllers/hotelController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(createHotel).get(getHotels);
-router.route("/:id").get(getHotelById).put(updateHotel).delete(deleteHotel);
+router.route("/").post(protect, createHotel).get(getHotels);
+router
+  .route("/:id")
+  .get(getHotelById)
+  .put(protect, updateHotel)
+  .delete(protect, deleteHotel);
 
 export default router;
