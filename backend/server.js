@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import hotelRoutes from './routes/hotelRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 
 // Configure environment
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/hotels', hotelRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 
 // Default Route
