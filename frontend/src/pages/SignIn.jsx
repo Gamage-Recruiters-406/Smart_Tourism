@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/sign.jpg';
+import smallImage from '../assets/small.png';
 import { useAuth } from '../context/AuthContext';
 
 const CompassIcon = () => (
@@ -73,7 +74,6 @@ export default function SignIn() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Get API base URL and version from environment variables
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const API_VERSION = import.meta.env.VITE_API_VERSION;
 
@@ -89,14 +89,11 @@ export default function SignIn() {
     setSuccess('');
 
     try {
-      // Construct the full URL using environment variables
       const loginUrl = `${API_BASE_URL}${API_VERSION}/users/login`;
-      
+
       const response = await fetch(loginUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
@@ -107,11 +104,8 @@ export default function SignIn() {
       }
 
       setSuccess('Login successful! Redirecting...');
-      
-      // Store token and user details in AuthContext
       login(data.user, data.token);
 
-      // Redirect to home/dashboard page after a short delay
       setTimeout(() => {
         navigate('/');
       }, 1500);
@@ -249,9 +243,16 @@ export default function SignIn() {
                   required
                 />
               </div>
+
+              {/* Forgot password — visual only, no functionality */}
+              <div className="flex justify-end mt-1.5">
+                <span className="text-gray-400 text-[11px] md:text-xs cursor-default select-none">
+                  Forgot your password?
+                </span>
+              </div>
             </div>
 
-            {/* LOGIN button  */}
+            {/* LOGIN button */}
             <button
               type="submit"
               disabled={loading}
@@ -292,8 +293,8 @@ export default function SignIn() {
             {/* Register link */}
             <p className="text-center text-gray-400 text-xs md:text-sm">
               Don't have account?{' '}
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => navigate('/register')}
                 className="text-cyan-500 font-semibold hover:text-cyan-600 transition-colors"
               >
@@ -303,6 +304,12 @@ export default function SignIn() {
           </form>
         </div>
       </div>
+      {/* ── BOTTOM RIGHT DECORATION ── */}
+      <img
+        src={smallImage}
+        alt=""
+        className="fixed bottom-4 right-4 pointer-events-none select-none z-50 w-16 h-16 object-contain"
+      />
     </div>
   );
 }
