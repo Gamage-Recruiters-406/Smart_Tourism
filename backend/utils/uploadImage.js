@@ -1,0 +1,44 @@
+import multer from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+// ✅ Load environment variables
+dotenv.config();
+
+// ✅ Configure Cloudinary (THIS IS WHAT YOU'RE MISSING)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Use memory storage — file is kept as a Buffer, never saved to disk
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
+
+/**
+ * Uploads a file buffer (from Multer) directly to Cloudinary.
+ * @param {Buffer} fileBuffer - The file buffer from req.file.buffer
+ * @param {string} folder - The Cloudinary folder to upload into (e.g. "profiles")
+ * @returns {Promise<string>} - The secure_url of the uploaded image
+ */
+export const uploadImage = (fileBuffer, folder = 'uploads') => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        use_filename: true,
+        unique_filename: true,
+        overwrite: true,
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        console.log('Cloudinary upload result:', result);
+        resolve(result.secure_url);
+      }
+    );
+
+    // Pipe the buffer into the Cloudinary upload stream
+    stream.end(fileBuffer);
+  });
+};
