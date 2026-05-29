@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import hotelRoutes from './routes/hotelRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 // Routes
 import userRoutes from "./routes/userRoutes.js";
 import destinationRoutes from './routes/destinationRoutes.js';
@@ -25,6 +26,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/v1/users", userRoutes);
 app.use('/api/hotels', hotelRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/api/v1/destinations', destinationRoutes);
 app.use('/api/v1/packages', packageRoutes);
 
