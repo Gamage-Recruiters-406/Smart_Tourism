@@ -1,6 +1,8 @@
-import React from 'react'
 import { SearchIcon, BellIcon, MailIcon } from 'lucide-react'
-export function Topbar() {
+export function Topbar({ user, notificationCount = 0 }) {
+  const displayName = user?.name || 'Admin User'
+  const roleLabel = user?.role === 'admin' ? 'Administrator' : 'Super Admin'
+
   return (
     <header className="bg-slate-950 border-b border-slate-800 px-8 py-4">
       <div className="flex items-center justify-between">
@@ -21,7 +23,11 @@ export function Topbar() {
           {/* Notifications */}
           <button className="relative p-2 text-slate-400 hover:text-slate-300 transition-colors">
             <BellIcon className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-400 rounded-full"></span>
+            {notificationCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 min-w-4 h-4 px-1 bg-cyan-400 rounded-full text-[10px] font-bold text-slate-950 flex items-center justify-center">
+                {notificationCount > 9 ? '9+' : notificationCount}
+              </span>
+            )}
           </button>
 
           {/* Mail */}
@@ -32,12 +38,12 @@ export function Topbar() {
           {/* Profile */}
           <div className="flex items-center gap-3 pl-4 border-l border-slate-800">
             <div className="text-right">
-              <div className="text-sm font-semibold text-white">Admin User</div>
-              <div className="text-xs text-slate-400">Super Admin</div>
+              <div className="text-sm font-semibold text-white">{displayName}</div>
+              <div className="text-xs text-slate-400">{roleLabel}</div>
             </div>
             <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
-              alt="Admin User"
+              src={user?.profileImage || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}
+              alt={displayName}
               className="w-10 h-10 rounded-full object-cover"
             />
           </div>

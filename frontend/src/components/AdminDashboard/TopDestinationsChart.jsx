@@ -1,6 +1,5 @@
-import React from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
-const data = [
+const defaultData = [
   {
     name: 'Bali',
     value: 35,
@@ -27,7 +26,7 @@ const data = [
     color: '#64748b',
   },
 ]
-export function TopDestinationsChart() {
+export function TopDestinationsChart({ data = defaultData }) {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
       <h2 className="text-lg font-semibold text-white mb-6">

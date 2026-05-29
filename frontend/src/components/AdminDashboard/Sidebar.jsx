@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   LayoutDashboardIcon,
   UsersIcon,
@@ -9,8 +8,9 @@ import {
   PieChartIcon,
   SettingsIcon,
   CompassIcon,
+  LogOutIcon,
 } from 'lucide-react'
-export function Sidebar() {
+export function Sidebar({ onLogout }) {
   return (
     <aside className="w-64 bg-slate-950 border-r border-slate-800 h-screen flex flex-col">
       {/* Logo */}
@@ -60,7 +60,11 @@ export function Sidebar() {
 
       {/* Logout */}
       <div className="p-4 border-t border-slate-800">
-        <button className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">
+        <button
+          onClick={onLogout}
+          className="flex items-center gap-2 text-red-400 hover:text-red-300 text-sm font-medium transition-colors"
+        >
+          <LogOutIcon className="w-4 h-4" />
           Logout
         </button>
       </div>

@@ -1,5 +1,3 @@
-import React from 'react'
-import { BoxIcon } from 'lucide-react'
 export function StatCard({
   label,
   value,

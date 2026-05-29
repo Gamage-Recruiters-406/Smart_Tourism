@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   LineChart,
   Line,
@@ -7,7 +6,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts'
-const data = [
+const defaultData = [
   {
     month: 'Jan',
     value: 45,
@@ -57,13 +56,13 @@ const data = [
     value: 112,
   },
 ]
-export function RevenueChart() {
+export function RevenueChart({ title = 'Platform activity', periodLabel = 'This Year', data = defaultData }) {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-white">Revenue Overview</h2>
+        <h2 className="text-lg font-semibold text-white">{title}</h2>
         <div className="px-3 py-1.5 bg-slate-800 rounded-lg text-sm text-slate-300">
-          This Year
+          {periodLabel}
         </div>
       </div>
       <div className="h-80">
