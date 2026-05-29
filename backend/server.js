@@ -9,6 +9,7 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import userRoutes from "./routes/userRoutes.js";
 import destinationRoutes from './routes/destinationRoutes.js';
 import packageRoutes from './routes/packageRoutes.js';
+import recommendationRoutes from './routes/recommendationRoutes.js';
 
 // Config
 dotenv.config();
@@ -29,6 +30,7 @@ app.use('/api/hotels', hotelRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/v1/destinations', destinationRoutes);
 app.use('/api/v1/packages', packageRoutes);
+app.use('/api/recommendations', recommendationRoutes);
 
 // ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
