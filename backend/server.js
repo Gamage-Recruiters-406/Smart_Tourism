@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import hotelRoutes from './routes/hotelRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 // Routes
 import userRoutes from "./routes/userRoutes.js";
 import destinationRoutes from './routes/destinationRoutes.js';
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRoutes);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/v1/contacts', contactRoutes);
 app.use('/api/v1/destinations', destinationRoutes);
 app.use('/api/v1/packages', packageRoutes);
 
