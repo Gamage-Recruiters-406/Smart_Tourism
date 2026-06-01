@@ -24,6 +24,52 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
+/**
+ * ============================================================================
+ * PACKAGE DETAILS PAGE
+ * ============================================================================
+ *
+ * CURRENT STATUS
+ * ----------------------------------------------------------------------------
+ *  Connected to backend API using Axios
+ *  Fetch package details by package ID
+ *  Skeleton loading implemented while data is loading
+ *  Responsive layout for mobile, tablet, and desktop
+ *  Hero section populated using backend data
+ *  Fullscreen gallery modal implemented
+ *  Image carousel navigation (next / previous)
+ *  Included / Excluded sections populated from backend
+ *  Quick Facts section connected to backend data
+ *  Price summary card connected to backend data
+ 
+ * PENDING BACKEND INTEGRATION
+ * ----------------------------------------------------------------------------
+ *  Reviews API/Data not available yet
+ *    - Currently using temporary hardcoded review data
+ *
+ *  Itinerary API/Data not available yet
+ *    - Currently using temporary hardcoded itinerary data
+ *
+ *  Package Highlights API/Data not available yet
+ *    - Currently using temporary hardcoded highlight data
+ *
+ * FUTURE IMPROVEMENTS
+ * ----------------------------------------------------------------------------
+ * - Replace hardcoded reviews with backend reviews
+ * - Replace hardcoded itinerary with backend itinerary
+ * - Replace hardcoded highlights with backend highlights
+ * - Use dynamic package ID from route params (useParams)
+ * - Add wishlist functionality
+ * - Navigate to booking page and contactUs page through buttons
+ 
+ 
+ * NOTES
+ * ----------------------------------------------------------------------------
+ * - Gallery uses backend images when available.
+ * - Fallback images should be provided if package has no images.
+ * ============================================================================
+ */
+
 
 const galleryImages = [
   "https://images.unsplash.com/photo-1586500036706-41963de24d8b?q=80&w=1200&auto=format&fit=crop",
@@ -161,7 +207,7 @@ function Skeleton() {
 }
 
 export default function PackageDetailsPage() {
-    //const { id } = useParams();
+    const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [openGallery, setOpenGallery] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
@@ -169,7 +215,7 @@ export default function PackageDetailsPage() {
 
   const API_BASE_URL = "http://localhost:8085"; // change if needed
   const API_VERSION =  "/api/v1";
-  const id = "6a16b396d7e3e871ee6c66ed";
+  // const id = "6a16b396d7e3e871ee6c66ed";
 
   
 
@@ -433,7 +479,7 @@ export default function PackageDetailsPage() {
 
       {/* CONTENT */}
       <section className="max-w-7xl mx-auto px-5 mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
           {/* LEFT */}
           <div className="space-y-8">
             {/* ABOUT */}
@@ -650,8 +696,8 @@ export default function PackageDetailsPage() {
           </div>
 
           {/* RIGHT */}
-          <div>
-            <div className="sticky top-6 space-y-6">
+          <div className="sticky top-6 self-start">
+            <div className="space-y-6">
               {/* PRICE CARD */}
               <div className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm">
                 <div className="bg-cyan-500 text-white p-7">
