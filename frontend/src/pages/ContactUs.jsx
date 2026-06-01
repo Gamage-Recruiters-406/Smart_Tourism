@@ -1,9 +1,6 @@
 import { useState } from "react";
 import heroBg from "../assets/hero-travel.jpg";
 
-// ─────────────────────────────────────────────
-//  SVG ICONS
-// ─────────────────────────────────────────────
 const PhoneIcon = () => (
   <svg
     viewBox="0 0 24 24"
@@ -101,21 +98,10 @@ const CheckIcon = () => (
   </svg>
 );
 
-// ─────────────────────────────────────────────
-//  CONTACT INFO CARD
-// ─────────────────────────────────────────────
 function ContactCard({ icon, label, value }) {
   return (
-    <div
-      className="flex items-center gap-4 p-4 bg-white border border-[#D0E8F2] rounded-2xl
-                    cursor-pointer transition-all duration-300
-                    hover:border-[#00C0E8] hover:shadow-[0_4px_20px_rgba(0,192,232,0.12)]
-                    hover:translate-x-1"
-    >
-      <div
-        className="w-11 h-11 rounded-xl bg-[#E0F7FD] flex items-center justify-center
-                      flex-shrink-0 text-[#00C0E8]"
-      >
+    <div className="flex items-center gap-4 p-4 bg-white border border-[#D0E8F2] rounded-2xl cursor-pointer transition-all duration-300 hover:border-[#00C0E8] hover:shadow-[0_4px_20px_rgba(0,192,232,0.12)] hover:translate-x-1">
+      <div className="w-11 h-11 rounded-xl bg-[#E0F7FD] flex items-center justify-center flex-shrink-0 text-[#00C0E8]">
         {icon}
       </div>
       <div>
@@ -126,25 +112,17 @@ function ContactCard({ icon, label, value }) {
   );
 }
 
-// ─────────────────────────────────────────────
-//  SOCIAL BUTTON
-// ─────────────────────────────────────────────
 function SocialBtn({ children, href = "#" }) {
   return (
     <a
       href={href}
-      className="w-10 h-10 rounded-xl border border-[#D0E8F2] bg-white flex items-center
-                  justify-center text-[#5A7A99] transition-all duration-200
-                  hover:bg-[#00C0E8] hover:border-[#00C0E8] hover:text-white"
+      className="w-10 h-10 rounded-xl border border-[#D0E8F2] bg-white flex items-center justify-center text-[#5A7A99] transition-all duration-200 hover:bg-[#00C0E8] hover:border-[#00C0E8] hover:text-white"
     >
       {children}
     </a>
   );
 }
 
-// ─────────────────────────────────────────────
-//  FORM INPUT
-// ─────────────────────────────────────────────
 function FormInput({ label, required, error, children }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -157,16 +135,9 @@ function FormInput({ label, required, error, children }) {
   );
 }
 
-const inputClass = `
-  w-full px-4 py-2.5 text-sm text-[#1A2E44] bg-[#F8FEFF]
-  border border-[#D0E8F2] rounded-xl outline-none
-  transition-all duration-200 placeholder:text-[#A0B8C8]
-  focus:border-[#00C0E8] focus:bg-white focus:ring-4 focus:ring-[#00C0E8]/10
-`;
+const inputClass =
+  "w-full px-4 py-2.5 text-sm text-[#1A2E44] bg-[#F8FEFF] border border-[#D0E8F2] rounded-xl outline-none transition-all duration-200 placeholder:text-[#A0B8C8] focus:border-[#00C0E8] focus:bg-white focus:ring-4 focus:ring-[#00C0E8]/10";
 
-// ─────────────────────────────────────────────
-//  STAT ITEM
-// ─────────────────────────────────────────────
 function StatItem({ number, label, last }) {
   return (
     <div
@@ -180,9 +151,6 @@ function StatItem({ number, label, last }) {
   );
 }
 
-// ─────────────────────────────────────────────
-//  MAIN COMPONENT
-// ─────────────────────────────────────────────
 export default function ContactUs() {
   const [form, setForm] = useState({
     firstName: "",
@@ -212,6 +180,10 @@ export default function ContactUs() {
     return errs;
   };
 
+  // ── BACKEND CONNECTED ─────────────────────────────────────────────────────
+  // API: POST /api/v1/contacts
+  // Model fields: name, email, phone, subject, message, inquiry
+  // ─────────────────────────────────────────────────────────────────────────
   const handleSubmit = async () => {
     const errs = validate();
     if (Object.keys(errs).length) {
@@ -220,21 +192,37 @@ export default function ContactUs() {
     }
 
     setLoading(true);
+    setErrors({});
+
     try {
-      // ── BACKEND CONNECT ─────────────────────────────────────────
-      // Replace the URL and adjust the body fields to match your API.
-      //
-      // const res = await fetch("/api/contact", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(form),
-      // });
-      // if (!res.ok) throw new Error("Server error");
-      // ────────────────────────────────────────────────────────────
+      const payload = {
+        name: `${form.firstName} ${form.lastName}`.trim(),
+        email: form.email,
+        phone: form.phone || "",
+        subject: form.inquiry, // backend requires "subject" — using inquiry value
+        message: form.message,
+        inquiry: form.inquiry,
+      };
 
-      // Simulated delay (remove when backend is connected)
-      await new Promise((r) => setTimeout(r, 1200));
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/contacts`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
 
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrors({
+          form: data.message || "Something went wrong. Please try again.",
+        });
+        return;
+      }
+
+      // success
       setSuccess(true);
       setForm({
         firstName: "",
@@ -246,7 +234,7 @@ export default function ContactUs() {
       });
       setTimeout(() => setSuccess(false), 5000);
     } catch {
-      setErrors({ form: "Something went wrong. Please try again." });
+      setErrors({ form: "Cannot connect to server. Please try again later." });
     } finally {
       setLoading(false);
     }
@@ -254,42 +242,21 @@ export default function ContactUs() {
 
   return (
     <div className="bg-[#F4FBFD] font-['DM_Sans'] min-h-screen">
-      {/* ── HERO ──────────────────────────────────────────── */}
+      {/* HERO */}
       <section className="relative px-6 md:px-12 pt-16 pb-24 overflow-hidden">
-        {/* ── Background Image ── */}
         <img
           src={heroBg}
           alt="Travel Hero Background"
           className="absolute inset-0 w-full h-full object-cover"
         />
-
-        {/* ── Dark overlay  */}
         <div className="absolute inset-0 bg-[#0A1628]/50" />
-
-        {/* ── Teal glow blobs ── */}
-        <div
-          className="pointer-events-none absolute -top-24 -right-20 w-[500px] h-[500px]
-                  rounded-full bg-[radial-gradient(circle,rgba(0,192,232,0.18)_0%,transparent_70%)]"
-        />
-        <div
-          className="pointer-events-none absolute -bottom-16 left-[10%] w-[300px] h-[300px]
-                  rounded-full bg-[radial-gradient(circle,rgba(0,192,232,0.10)_0%,transparent_70%)]"
-        />
-
-        {/* ── Text content ── */}
+        <div className="pointer-events-none absolute -top-24 -right-20 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(0,192,232,0.18)_0%,transparent_70%)]" />
+        <div className="pointer-events-none absolute -bottom-16 left-[10%] w-[300px] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(0,192,232,0.10)_0%,transparent_70%)]" />
         <div className="relative z-10 max-w-5xl mx-auto">
-          <span
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs
-                     font-medium text-[#00C0E8] border border-[#00C0E8]/30
-                     bg-[#00C0E8]/15 mb-6"
-          >
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium text-[#00C0E8] border border-[#00C0E8]/30 bg-[#00C0E8]/15 mb-6">
             ✦ Get in touch with us
           </span>
-
-          <h1
-            className="font-['Syne'] text-4xl md:text-5xl font-black text-white
-                   leading-tight tracking-tight mb-4 max-w-xl"
-          >
+          <h1 className="font-['Syne'] text-4xl md:text-5xl font-black text-white leading-tight tracking-tight mb-4 max-w-xl">
             We're here to make your{" "}
             <span className="text-[#00C0E8]">travel dreams</span> happen.
           </h1>
@@ -300,7 +267,7 @@ export default function ContactUs() {
         </div>
       </section>
 
-      {/* ── STATS STRIP ───────────────────────────────────── */}
+      {/* STATS */}
       <div className="bg-[#00C0E8] px-6 md:px-12 py-5 flex">
         <StatItem number="24/7" label="Support Available" />
         <StatItem number="< 2h" label="Avg. Response Time" />
@@ -308,12 +275,9 @@ export default function ContactUs() {
         <StatItem number="4.9★" label="Customer Satisfaction" last />
       </div>
 
-      {/* ── MAIN CONTENT ──────────────────────────────────── */}
-      <div
-        className="max-w-5xl mx-auto px-6 md:px-12 py-16
-                      grid grid-cols-1 md:grid-cols-2 gap-14 items-start"
-      >
-        {/* LEFT — INFO */}
+      {/* MAIN */}
+      <div className="max-w-5xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-2 gap-14 items-start">
+        {/* LEFT */}
         <div>
           <p className="text-[10px] font-semibold tracking-[2px] uppercase text-[#00C0E8] mb-2">
             Contact Information
@@ -326,8 +290,6 @@ export default function ContactUs() {
             a solo adventure or a group tour, our team is here to guide you
             every step of the way.
           </p>
-
-          {/* Contact cards */}
           <div className="flex flex-col gap-3 mb-9">
             <ContactCard
               icon={<PhoneIcon />}
@@ -350,13 +312,10 @@ export default function ContactUs() {
               value="Mon – Sat: 9:00 AM – 7:00 PM"
             />
           </div>
-
-          {/* Social */}
           <p className="text-xs font-medium text-[#5A7A99] mb-3">
             Follow us on
           </p>
           <div className="flex gap-2">
-            {/* Facebook */}
             <SocialBtn>
               <svg
                 viewBox="0 0 24 24"
@@ -370,7 +329,6 @@ export default function ContactUs() {
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
               </svg>
             </SocialBtn>
-            {/* Instagram */}
             <SocialBtn>
               <svg
                 viewBox="0 0 24 24"
@@ -386,7 +344,6 @@ export default function ContactUs() {
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
             </SocialBtn>
-            {/* Twitter / X */}
             <SocialBtn>
               <svg
                 viewBox="0 0 24 24"
@@ -400,7 +357,6 @@ export default function ContactUs() {
                 <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
               </svg>
             </SocialBtn>
-            {/* LinkedIn */}
             <SocialBtn>
               <svg
                 viewBox="0 0 24 24"
@@ -420,16 +376,8 @@ export default function ContactUs() {
         </div>
 
         {/* RIGHT — FORM */}
-        <div
-          className="relative bg-white rounded-3xl p-9 shadow-[0_4px_32px_rgba(0,192,232,0.10)]
-                        border border-[#D0E8F2] overflow-hidden"
-        >
-          {/* Top accent bar */}
-          <div
-            className="absolute top-0 left-0 right-0 h-1
-                          bg-gradient-to-r from-[#00C0E8] to-[#0099BB]"
-          />
-
+        <div className="relative bg-white rounded-3xl p-9 shadow-[0_4px_32px_rgba(0,192,232,0.10)] border border-[#D0E8F2] overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00C0E8] to-[#0099BB]" />
           <h3 className="font-['Syne'] text-xl font-bold text-[#0A1628] mb-1">
             Send us a message
           </h3>
@@ -438,7 +386,6 @@ export default function ContactUs() {
           </p>
 
           <div className="flex flex-col gap-4">
-            {/* Name row */}
             <div className="grid grid-cols-2 gap-3">
               <FormInput label="First Name" required error={errors.firstName}>
                 <input
@@ -460,7 +407,6 @@ export default function ContactUs() {
               </FormInput>
             </div>
 
-            {/* Email */}
             <FormInput label="Email Address" required error={errors.email}>
               <input
                 className={inputClass}
@@ -472,7 +418,6 @@ export default function ContactUs() {
               />
             </FormInput>
 
-            {/* Phone */}
             <FormInput label="Phone Number">
               <input
                 className={inputClass}
@@ -484,7 +429,6 @@ export default function ContactUs() {
               />
             </FormInput>
 
-            {/* Inquiry */}
             <FormInput label="Inquiry Type" required error={errors.inquiry}>
               <select
                 className={inputClass + " appearance-none cursor-pointer"}
@@ -502,7 +446,6 @@ export default function ContactUs() {
               </select>
             </FormInput>
 
-            {/* Message */}
             <FormInput label="Your Message" required error={errors.message}>
               <textarea
                 className={
@@ -515,31 +458,23 @@ export default function ContactUs() {
               />
             </FormInput>
 
-            {/* Server error */}
             {errors.form && (
-              <p className="text-xs text-red-500 text-center">{errors.form}</p>
-            )}
-
-            {/* Success toast */}
-            {success && (
-              <div
-                className="flex items-center gap-2 px-4 py-3 rounded-xl
-                              bg-green-50 border border-green-400 text-green-700 text-xs"
-              >
-                <CheckIcon />
-                Message sent! We'll get back to you within 2 hours.
+              <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-300 text-red-600 text-xs">
+                ⚠️ {errors.form}
               </div>
             )}
 
-            {/* Submit */}
+            {success && (
+              <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-green-50 border border-green-400 text-green-700 text-xs">
+                <CheckIcon /> Message sent! We'll get back to you within 2
+                hours.
+              </div>
+            )}
+
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5
-                         bg-[#00C0E8] hover:bg-[#0099BB] disabled:opacity-60
-                         text-[#0A1628] font-['Syne'] font-bold text-sm rounded-xl
-                         transition-all duration-200 hover:-translate-y-0.5
-                         hover:shadow-[0_8px_24px_rgba(0,192,232,0.32)]"
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#00C0E8] hover:bg-[#0099BB] disabled:opacity-60 text-[#0A1628] font-['Syne'] font-bold text-sm rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,192,232,0.32)]"
             >
               {loading ? (
                 <>
@@ -562,7 +497,6 @@ export default function ContactUs() {
               )}
             </button>
 
-            {/* Security note */}
             <p className="flex items-center justify-center gap-1.5 text-[10px] text-[#5A7A99]">
               <LockIcon /> Your information is secure and will never be shared.
             </p>
@@ -570,7 +504,7 @@ export default function ContactUs() {
         </div>
       </div>
 
-      {/* ── MAP SECTION ───────────────────────────────────── */}
+      {/* MAP */}
       <section className="bg-[#0A1628] px-6 md:px-12 py-14">
         <div className="max-w-5xl mx-auto">
           <div className="mb-7">
@@ -581,44 +515,17 @@ export default function ContactUs() {
               45 Galle Road, Colombo 03, Sri Lanka
             </p>
           </div>
-
-          {/* ── MAP PLACEHOLDER ──────────────────────────────
-              To add Google Maps:
-              1. Go to Google Maps → find your location
-              2. Click Share → Embed a map → Copy HTML
-              3. Replace the <div> below with the <iframe> tag
-              ─────────────────────────────────────────────── */}
-          <div
-            className="w-full h-64 rounded-2xl overflow-hidden
-                          border border-[#00C0E8]/20 bg-[#112240]
-                          flex items-center justify-center"
-          >
-            {/* ── UNCOMMENT BELOW & REPLACE src WITH YOUR GOOGLE MAPS EMBED URL ── */}
-            {/*
+          <div className="w-full h-72 rounded-2xl overflow-hidden border border-[#00C0E8]/20">
             <iframe
-              src="https://www.google.com/maps/embed?pb=YOUR_EMBED_URL_HERE"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.9!2d79.8567!3d6.9147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2591614000001%3A0x1!2s45+Galle+Road%2C+Colombo+03%2C+Sri+Lanka!5e0!3m2!1sen!2slk!4v1"
               width="100%"
               height="100%"
-              style={{ border: 0 }}
+              style={{ border: 0, display: "block" }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="SmartTour Office Location"
             />
-            */}
-
-            {/* Placeholder — remove this block when iframe is added */}
-            <div className="text-center text-white/35">
-              <MapPinIcon />
-              <p className="text-xs mt-2 font-light leading-relaxed">
-                Google Maps goes here
-                <br />
-                <span className="text-[#00C0E8]/70">
-                  Uncomment the &lt;iframe&gt; in the code and add your embed
-                  URL
-                </span>
-              </p>
-            </div>
           </div>
         </div>
       </section>
