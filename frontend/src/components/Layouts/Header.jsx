@@ -27,7 +27,7 @@ const Header = ({ isLoggedIn = false }) => {
         <Link to="/maps" className="hover:text-[#10a37f] transition-colors">Maps</Link>
       </nav>
 
-      {/* Right Actions */}
+      {/* new */}
       <div className="flex items-center gap-5 font-semibold text-sm">
         {!isLoggedIn ? (
           <>
