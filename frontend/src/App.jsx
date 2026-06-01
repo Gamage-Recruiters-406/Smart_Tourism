@@ -58,7 +58,7 @@ function App() {
           />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/SignIn" element={<SignIn />} />
-          <Route path="/packageDetails" element={<PackageDetailsPage />} />
+          <Route path="/packageDetails/:id" element={<PackageDetailsPage />} />
           <Route path="/register" element={<Navigate to="/signin" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/Contactus" element={<ContactUs />} />
