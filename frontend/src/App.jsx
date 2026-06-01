@@ -12,6 +12,8 @@ import { useAuth } from "./context/AuthContext";
 import "./index.css";
 import PackageDetailsPage from "./pages/PackageDetails";
 import ContactUs from "./pages/ContactUs";
+import SignUp from "./pages/SignUp";
+
 
 function isAdminUser(user) {
   return user?.role === "admin" || user?.userType === "admin" || user?.isAdmin;
@@ -57,9 +59,8 @@ function App() {
             }
           />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/SignIn" element={<SignIn />} />
+          <Route path="/register" element={<SignUp />} />
           <Route path="/packageDetails/:id" element={<PackageDetailsPage />} />
-          <Route path="/register" element={<Navigate to="/signin" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/Contactus" element={<ContactUs />} />
         </Routes>

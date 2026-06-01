@@ -74,39 +74,8 @@ export default function SignIn() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
-  const API_VERSION = import.meta.env.VITE_API_VERSION || '/v1';
-
-  const readResponseBody = async (response) => {
-    const bodyText = await response.text();
-
-    if (!bodyText) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(bodyText);
-    } catch (parseError) {
-      return { message: bodyText };
-    }
-  };
-
-  const performDemoLogin = () => {
-    const demoUser = {
-      name: 'Admin User',
-      email,
-      role: 'admin',
-      userType: 'admin',
-      isAdmin: true,
-    };
-
-    login(demoUser, 'demo-admin-token');
-    setSuccess('Demo login successful! Redirecting...');
-
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_VERSION = import.meta.env.VITE_API_VERSION;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -120,7 +89,7 @@ export default function SignIn() {
     setSuccess('');
 
     try {
-      const loginUrl = `${API_BASE_URL.replace(/\/+$/, '')}/${API_VERSION.replace(/^\/+|\/+$/g, '')}/users/login`;
+      const loginUrl = `${API_BASE_URL}${API_VERSION}/users/login`;
 
       const response = await fetch(loginUrl, {
         method: 'POST',
@@ -128,24 +97,10 @@ export default function SignIn() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await readResponseBody(response);
+      const data = await response.json();
 
-      if (!response.ok || data?.success === false) {
-        if (import.meta.env.DEV) {
-          performDemoLogin();
-          return;
-        }
-
-        throw new Error(data?.message || 'Login failed. Please check your credentials.');
-      }
-
-      if (!data?.user || !data?.token) {
-        if (import.meta.env.DEV) {
-          performDemoLogin();
-          return;
-        }
-
-        throw new Error('Login response was incomplete. Please try again.');
+      if (!response.ok || data.success === false) {
+        throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
       setSuccess('Login successful! Redirecting...');
@@ -175,7 +130,7 @@ export default function SignIn() {
 
         {/* Glassmorphism branding card */}
         <div
-          className="absolute bottom-[10%] md:bottom-[18%] left-1/2 -translate-x-1/2 rounded-2xl px-6 md:px-10 py-5 md:py-8 text-center w-[200px] md:w-[260px] shadow-2xl"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl px-6 md:px-10 py-5 md:py-8 text-center w-[200px] md:w-[260px] shadow-2xl"
           style={{
             background: 'rgba(255,255,255,0.18)',
             backdropFilter: 'blur(16px)',
