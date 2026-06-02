@@ -12,7 +12,7 @@ import { useAuth } from "./context/AuthContext";
 import "./index.css";
 import PackageDetailsPage from "./pages/PackageDetails";
 import ContactUs from "./pages/ContactUs";
-import SignUp from "./pages/SignUp";
+import SignUp from "./pages/Signup";
 
 import Layout from "./components/Layouts/Layout";
 import Header from "./components/Layouts/Header";
