@@ -1,27 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { User, Mail, Phone, Lock, Eye, EyeOff, Compass, Loader2, Shield, ChevronDown } from 'lucide-react';
 import backgroundImage from '../assets/sign.jpg';
 import smallImage from '../assets/small.png';
 import { useAuth } from '../context/AuthContext';
-
-const CompassIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="white"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="w-9 h-9"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <polygon
-      points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
-      fill="white"
-      opacity="0.9"
-    />
-  </svg>
-);
 
 const PlaneIcon = () => (
   <svg
@@ -88,12 +70,13 @@ export default function Signup() {
     return '';
   };
 
- const validatePhone = (phone) => {
+  const validatePhone = (phone) => {
     if (!phone) return '';
     const phoneRegex = /^\+?\(?[0-9]{1,4}\)?[-\s.]?\(?[0-9]{1,4}\)?[-\s.]?[0-9]{1,5}[-\s.]?[0-9]{1,5}$/;
     if (!phoneRegex.test(phone)) return 'Please enter a valid phone number';
     return '';
-};
+  };
+
   const validatePassword = (password) => {
     if (!password) return 'Password is required';
     if (password.length < 6) return 'Password must be at least 6 characters';
@@ -271,13 +254,17 @@ export default function Signup() {
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen overflow-hidden font-sans">
-      {/* LEFT PANEL */}
-      <div className="relative w-full md:w-[54%] h-[40%] md:h-full overflow-hidden">
+      {/* ── LEFT PANEL */}
+      <div className="relative w-full md:w-1/2 h-[40%] md:h-full overflow-hidden">
+        {/* Background image  */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/35" />
+        {/*   vignette  */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/20" />
+
+        {/* Glassmorphism branding card */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl px-6 md:px-10 py-5 md:py-8 text-center w-[200px] md:w-[260px] shadow-2xl"
           style={{
@@ -293,8 +280,9 @@ export default function Signup() {
               background: 'linear-gradient(135deg, #34d399 0%, #059669 100%)',
             }}
           >
-            <CompassIcon />
+            <Compass className="w-7 h-7 md:w-9 md:h-9 text-white" />
           </div>
+
           <h2 className="text-white text-lg md:text-2xl font-bold tracking-tight mb-1">
             Smart Tourism
           </h2>
@@ -305,10 +293,10 @@ export default function Signup() {
         </div>
       </div>
 
-      {/* RIGHT PANEL */}
+      {/* ── RIGHT PANEL — White form ── */}
       <div className="flex-1 bg-white flex flex-col items-center justify-center px-6 md:px-12 py-8 md:py-0 overflow-y-auto">
         <div className="w-full max-w-[360px]">
-          <div className="text-center mb-6 md:mb-10">
+          <div className="text-center mb-6 md:mb-8">
             <h1
               className="text-3xl md:text-4xl font-bold"
               style={{ color: '#06b6d4' }}
@@ -316,7 +304,7 @@ export default function Signup() {
               Welcome <PlaneIcon />
             </h1>
             <p className="text-gray-400 text-xs md:text-sm mt-1 md:mt-2 tracking-wide">
-              Create your account
+              Start your journey with us today
             </p>
           </div>
 
@@ -332,30 +320,21 @@ export default function Signup() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
             {/* Full Name */}
             <div className="relative">
               <span
                 className="absolute -top-2.5 left-3 text-[11px] md:text-xs font-medium px-1 bg-white z-10"
                 style={{ color: '#06b6d4' }}
               >
-                Full Name *
+                Full Name
               </span>
               <div className={`flex items-center gap-2 md:gap-3 border rounded-lg px-3 md:px-4 py-2.5 md:py-3 transition-all duration-200 focus-within:shadow-sm ${
                 touched.fullName && errors.fullName 
                   ? 'border-red-400 focus-within:border-red-400 focus-within:shadow-red-100' 
                   : 'border-gray-200 focus-within:border-cyan-400 focus-within:shadow-cyan-100'
               }`}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9ca3af"
-                  strokeWidth="1.5"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
+                <User className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
                   type="text"
                   name="fullName"
@@ -364,7 +343,7 @@ export default function Signup() {
                   onBlur={handleBlur}
                   disabled={loading}
                   className="flex-1 outline-none text-gray-600 text-xs md:text-sm bg-transparent disabled:opacity-50"
-                  placeholder="John Doe"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
@@ -379,25 +358,14 @@ export default function Signup() {
                 className="absolute -top-2.5 left-3 text-[11px] md:text-xs font-medium px-1 bg-white z-10"
                 style={{ color: '#06b6d4' }}
               >
-                Email *
+                Email
               </span>
               <div className={`flex items-center gap-2 md:gap-3 border rounded-lg px-3 md:px-4 py-2.5 md:py-3 transition-all duration-200 focus-within:shadow-sm ${
                 touched.email && errors.email 
                   ? 'border-red-400 focus-within:border-red-400 focus-within:shadow-red-100' 
                   : 'border-gray-200 focus-within:border-cyan-400 focus-within:shadow-cyan-100'
               }`}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9ca3af"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
+                <Mail className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
                   type="email"
                   name="email"
@@ -406,7 +374,7 @@ export default function Signup() {
                   onBlur={handleBlur}
                   disabled={loading}
                   className="flex-1 outline-none text-gray-600 text-xs md:text-sm bg-transparent disabled:opacity-50"
-                  placeholder="your@email.com"
+                  placeholder="Enter your password"
                   required
                 />
               </div>
@@ -428,15 +396,7 @@ export default function Signup() {
                   ? 'border-red-400 focus-within:border-red-400 focus-within:shadow-red-100' 
                   : 'border-gray-200 focus-within:border-cyan-400 focus-within:shadow-cyan-100'
               }`}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9ca3af"
-                  strokeWidth="1.5"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
+                <Phone className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
                   type="tel"
                   name="phone"
@@ -445,7 +405,7 @@ export default function Signup() {
                   onBlur={handleBlur}
                   disabled={loading}
                   className="flex-1 outline-none text-gray-600 text-xs md:text-sm bg-transparent disabled:opacity-50"
-                  placeholder="+1 234 567 8900"
+                  placeholder="Enter your password"
                 />
               </div>
               {touched.phone && errors.phone && (
@@ -459,25 +419,14 @@ export default function Signup() {
                 className="absolute -top-2.5 left-3 text-[11px] md:text-xs font-medium px-1 bg-white z-10"
                 style={{ color: '#06b6d4' }}
               >
-                Password *
+                Password
               </span>
               <div className={`flex items-center gap-2 md:gap-3 border rounded-lg px-3 md:px-4 py-2.5 md:py-3 transition-all duration-200 focus-within:shadow-sm ${
                 touched.password && errors.password 
                   ? 'border-red-400 focus-within:border-red-400 focus-within:shadow-red-100' 
                   : 'border-gray-200 focus-within:border-cyan-400 focus-within:shadow-cyan-100'
               }`}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9ca3af"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
+                <Lock className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -486,7 +435,7 @@ export default function Signup() {
                   onBlur={handleBlur}
                   disabled={loading}
                   className="flex-1 outline-none text-gray-600 text-xs md:text-sm bg-transparent tracking-widest disabled:opacity-50"
-                  placeholder="••••••••••••"
+                  placeholder="Enter your password"
                   required
                 />
                 <button
@@ -494,36 +443,7 @@ export default function Signup() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="text-gray-400 hover:text-gray-600 shrink-0"
                 >
-                  {showPassword ? (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {touched.password && errors.password && (
@@ -540,25 +460,14 @@ export default function Signup() {
                 className="absolute -top-2.5 left-3 text-[11px] md:text-xs font-medium px-1 bg-white z-10"
                 style={{ color: '#06b6d4' }}
               >
-                Confirm Password *
+                Confirm Password
               </span>
               <div className={`flex items-center gap-2 md:gap-3 border rounded-lg px-3 md:px-4 py-2.5 md:py-3 transition-all duration-200 focus-within:shadow-sm ${
                 touched.confirmPassword && errors.confirmPassword 
                   ? 'border-red-400 focus-within:border-red-400 focus-within:shadow-red-100' 
                   : 'border-gray-200 focus-within:border-cyan-400 focus-within:shadow-cyan-100'
               }`}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9ca3af"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
+                <Lock className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
                   type={showConfirm ? 'text' : 'password'}
                   name="confirmPassword"
@@ -567,7 +476,7 @@ export default function Signup() {
                   onBlur={handleBlur}
                   disabled={loading}
                   className="flex-1 outline-none text-gray-600 text-xs md:text-sm bg-transparent tracking-widest disabled:opacity-50"
-                  placeholder="••••••••••••"
+                  placeholder="Enter your password"
                   required
                 />
                 <button
@@ -575,36 +484,7 @@ export default function Signup() {
                   onClick={() => setShowConfirm(!showConfirm)}
                   className="text-gray-400 hover:text-gray-600 shrink-0"
                 >
-                  {showConfirm ? (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+                  {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {touched.confirmPassword && errors.confirmPassword && (
@@ -624,16 +504,7 @@ export default function Signup() {
                 Role
               </span>
               <div className="flex items-center gap-2 md:gap-3 border border-gray-200 rounded-lg px-3 md:px-4 py-2.5 md:py-3 transition-all duration-200 focus-within:border-cyan-400 focus-within:shadow-sm focus-within:shadow-cyan-100">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9ca3af"
-                  strokeWidth="1.5"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+                <Shield className="w-5 h-5 shrink-0 text-gray-400" />
                 <select
                   name="role"
                   value={form.role}
@@ -644,6 +515,7 @@ export default function Signup() {
                   <option value="Traveler">Traveler</option>
                   <option value="Admin">Admin</option>
                 </select>
+                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
               </div>
             </div>
 
@@ -687,29 +559,11 @@ export default function Signup() {
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5 text-white"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
+                  <Loader2 className="animate-spin h-5 w-5 text-white" />
                   SIGNING UP...
                 </span>
               ) : (
-                'SIGN UP'
+                'Sign up'
               )}
             </button>
 
