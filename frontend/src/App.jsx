@@ -13,7 +13,7 @@ import "./index.css";
 import PackageDetailsPage from "./pages/PackageDetails";
 import ContactUs from "./pages/ContactUs";
 import SignUp from "./pages/Signup";
-
+import HotelDetailsPage from "./pages/HotelDetailsPage";
 import Layout from "./components/Layouts/Layout";
 import Header from "./components/Layouts/Header";
 import Footer from "./components/Layouts/Footer";
@@ -66,6 +66,7 @@ function App() {
             <Route path="/register" element={<SignUp />} />
             <Route path="/packageDetails" element={<PackageDetailsPage />} />
             <Route path="/packageDetails/:id" element={<PackageDetailsPage />} />
+            <Route path="/hotelDetails" element={<HotelDetailsPage />} />
             <Route path="/Contactus" element={<ContactUs />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
