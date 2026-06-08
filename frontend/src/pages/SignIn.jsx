@@ -1,27 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, Compass, Loader2 } from 'lucide-react';
 import backgroundImage from '../assets/sign.jpg';
 import smallImage from '../assets/small.png';
 import { useAuth } from '../context/AuthContext';
-
-const CompassIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="white"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="w-9 h-9"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <polygon
-      points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
-      fill="white"
-      opacity="0.9"
-    />
-  </svg>
-);
 
 const PlaneIcon = () => (
   <svg
@@ -33,80 +15,20 @@ const PlaneIcon = () => (
   </svg>
 );
 
-const MailIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#9ca3af"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="w-5 h-5 shrink-0"
-  >
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-    <polyline points="22,6 12,13 2,6" />
-  </svg>
-);
-
-const LockIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#9ca3af"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="w-5 h-5 shrink-0"
-  >
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-  </svg>
-);
-
 export default function SignIn() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
-  const API_VERSION = import.meta.env.VITE_API_VERSION || '/v1';
-
-  const readResponseBody = async (response) => {
-    const bodyText = await response.text();
-
-    if (!bodyText) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(bodyText);
-    } catch (parseError) {
-      return { message: bodyText };
-    }
-  };
-
-  const performDemoLogin = () => {
-    const demoUser = {
-      name: 'Admin User',
-      email,
-      role: 'admin',
-      userType: 'admin',
-      isAdmin: true,
-    };
-
-    login(demoUser, 'demo-admin-token');
-    setSuccess('Demo login successful! Redirecting...');
-
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_VERSION = import.meta.env.VITE_API_VERSION;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -120,7 +42,7 @@ export default function SignIn() {
     setSuccess('');
 
     try {
-      const loginUrl = `${API_BASE_URL.replace(/\/+$/, '')}/${API_VERSION.replace(/^\/+|\/+$/g, '')}/users/login`;
+      const loginUrl = `${API_BASE_URL}${API_VERSION}/users/login`;
 
       const response = await fetch(loginUrl, {
         method: 'POST',
@@ -128,24 +50,10 @@ export default function SignIn() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await readResponseBody(response);
+      const data = await response.json();
 
-      if (!response.ok || data?.success === false) {
-        if (import.meta.env.DEV) {
-          performDemoLogin();
-          return;
-        }
-
-        throw new Error(data?.message || 'Login failed. Please check your credentials.');
-      }
-
-      if (!data?.user || !data?.token) {
-        if (import.meta.env.DEV) {
-          performDemoLogin();
-          return;
-        }
-
-        throw new Error('Login response was incomplete. Please try again.');
+      if (!response.ok || data.success === false) {
+        throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
       setSuccess('Login successful! Redirecting...');
@@ -163,19 +71,19 @@ export default function SignIn() {
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen overflow-hidden font-sans">
-      {/* ── LEFT PANEL ── */}
-      <div className="relative w-full md:w-[54%] h-[40%] md:h-full overflow-hidden">
+      {/* ── LEFT PANEL  */}
+      <div className="relative w-full md:w-1/2 h-[40%] md:h-full overflow-hidden">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
         />
-        {/* Dark vignette overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/35" />
+        {/* vignette  */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/20" />
 
-        {/* Glassmorphism branding card */}
+        {/* Glassmorphism branding card*/}
         <div
-          className="absolute bottom-[10%] md:bottom-[18%] left-1/2 -translate-x-1/2 rounded-2xl px-6 md:px-10 py-5 md:py-8 text-center w-[200px] md:w-[260px] shadow-2xl"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl px-6 md:px-10 py-5 md:py-8 text-center w-[200px] md:w-[260px] shadow-2xl"
           style={{
             background: 'rgba(255,255,255,0.18)',
             backdropFilter: 'blur(16px)',
@@ -183,14 +91,13 @@ export default function SignIn() {
             border: '1px solid rgba(255,255,255,0.3)',
           }}
         >
-          {/* Green compass icon tile */}
           <div
             className="w-12 h-12 md:w-16 md:h-16 rounded-2xl mx-auto mb-2 md:mb-4 flex items-center justify-center shadow-lg"
             style={{
               background: 'linear-gradient(135deg, #34d399 0%, #059669 100%)',
             }}
           >
-            <CompassIcon />
+            <Compass className="w-7 h-7 md:w-9 md:h-9 text-white" />
           </div>
 
           <h2 className="text-white text-lg md:text-2xl font-bold tracking-tight mb-1">
@@ -203,7 +110,7 @@ export default function SignIn() {
         </div>
       </div>
 
-      {/* ── RIGHT PANEL ── */}
+      {/* ── RIGHT PANEL  */}
       <div className="flex-1 bg-white flex flex-col items-center justify-center px-6 md:px-12 py-8 md:py-0 overflow-y-auto">
         <div className="w-full max-w-[360px]">
           {/* Heading */}
@@ -245,7 +152,7 @@ export default function SignIn() {
                     : 'border-gray-200'
                 }`}
               >
-                <MailIcon />
+                <Mail className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
                   type="email"
                   value={email}
@@ -275,9 +182,9 @@ export default function SignIn() {
                     : 'border-gray-200'
                 }`}
               >
-                <LockIcon />
+                <Lock className="w-5 h-5 shrink-0 text-gray-400" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setPasswordFocused(true)}
@@ -287,14 +194,16 @@ export default function SignIn() {
                   placeholder="••••••••••••"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors shrink-0"
+                  tabIndex="-1"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
 
-              {/* Forgot password — visual only, no functionality */}
-              <div className="flex justify-end mt-1.5">
-                <span className="text-gray-400 text-[11px] md:text-xs cursor-default select-none">
-                  Forgot your password?
-                </span>
-              </div>
             </div>
 
             {/* LOGIN button */}
@@ -324,10 +233,7 @@ export default function SignIn() {
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
+                  <Loader2 className="animate-spin h-5 w-5 text-white" />
                   LOGGING IN...
                 </span>
               ) : (
