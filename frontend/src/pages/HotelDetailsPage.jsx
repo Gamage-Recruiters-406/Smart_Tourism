@@ -3,7 +3,6 @@ import {
 	Bath,
 	BedDouble,
 	Camera,
-	ChevronRight,
 	Clock3,
 	Compass,
 	MapPin,
@@ -23,10 +22,7 @@ import heroBackground from "../assets/images/hero_background.png";
 import maldivesOverwater from "../assets/images/maldives_overwater.png";
 import oiaCliffside from "../assets/images/oia_cliffside.png";
 import villingiliIsland from "../assets/images/villingili_island.png";
-import zermattVillage from "../assets/images/zermatt_village.png";
-import serengetiSafari from "../assets/images/serengeti_safari.png";
 import amazonEcoResort from "../assets/images/amazon_eco_resort.png";
-import gionDistrict from "../assets/images/gion_district.png";
 
 const hotelData = {
 	name: "Azure Bay Resort",
@@ -100,32 +96,6 @@ const hotelData = {
 			rating: 5,
 			comment:
 				"Luxury at its finest! From check-in to check-out, everything was perfect. The sunset views from our villa were unforgettable. The staff remembered our names and preferences. Worth every penny!",
-		},
-	],
-	similarHotels: [
-		{
-			name: "Sunset Paradise Villa",
-			rating: 4.7,
-			price: "$280",
-			image: zermattVillage,
-		},
-		{
-			name: "Ocean Breeze Resort",
-			rating: 4.9,
-			price: "$350",
-			image: gionDistrict,
-		},
-		{
-			name: "Palm Garden Hotel",
-			rating: 4.6,
-			price: "$245",
-			image: serengetiSafari,
-		},
-		{
-			name: "Tropical Haven Spa",
-			rating: 4.8,
-			price: "$310",
-			image: amazonEcoResort,
 		},
 	],
 	reviewMetrics: [
@@ -351,46 +321,6 @@ export default function HotelDetailsPage() {
 								</div>
 								<p className="mt-3 text-sm font-medium text-slate-700">{label}</p>
 							</div>
-						))}
-					</div>
-				</section>
-
-				<section className="mt-6 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] sm:p-7">
-					<SectionTitle
-						eyebrow="Similar Hotels"
-						title="More stays you may like"
-						action={
-							<div className="flex items-center gap-2 text-slate-400">
-								<button className="rounded-full border border-slate-200 bg-white p-2 transition hover:text-sky-500">
-									<ChevronRight className="h-4 w-4 rotate-180" />
-								</button>
-								<button className="rounded-full border border-slate-200 bg-white p-2 transition hover:text-sky-500">
-									<ChevronRight className="h-4 w-4" />
-								</button>
-							</div>
-						}
-					/>
-
-					<div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-						{hotelData.similarHotels.map((hotel) => (
-							<article key={hotel.name} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.06)] transition hover:-translate-y-1">
-								<img src={hotel.image} alt={hotel.name} className="h-44 w-full object-cover" />
-								<div className="p-4">
-									<h3 className="text-base font-semibold text-slate-900">{hotel.name}</h3>
-									<div className="mt-2 flex items-center gap-1 text-sm text-sky-500">
-										<Star className="h-4 w-4 fill-current" />
-										<span className="font-medium text-slate-700">{hotel.rating}</span>
-									</div>
-									<div className="mt-4 flex items-end justify-between gap-3">
-										<p className="text-xl font-semibold text-slate-900">
-											{hotel.price}<span className="text-sm font-normal text-slate-500">/night</span>
-										</p>
-										<button className="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-600">
-											View Details
-										</button>
-									</div>
-								</div>
-							</article>
 						))}
 					</div>
 				</section>
