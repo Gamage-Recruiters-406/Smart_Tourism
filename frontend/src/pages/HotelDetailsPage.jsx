@@ -99,11 +99,7 @@ const hotelData = {
 		},
 	],
 	reviewMetrics: [
-		{ label: "Cleanliness", value: 4.9 },
-		{ label: "Service", value: 4.8 },
-		{ label: "Location", value: 4.7 },
-		{ label: "Value", value: 4.6 },
-		{ label: "Comfort", value: 4.9 },
+		{ label: "Overall", value: 4.8 },
 	],
 };
 
@@ -111,15 +107,20 @@ function formatPrice(value) {
 	return new Intl.NumberFormat("en-US").format(value);
 }
 
-function StarRow({ rating }) {
+function StarRow({ rating, size = "h-4 w-4" }) {
 	return (
-		<div className="flex items-center gap-0.5 text-sky-500">
-			{Array.from({ length: 5 }).map((_, index) => (
-				<Star
-					key={index}
-					className={index < Math.round(rating) ? "h-4 w-4 fill-current" : "h-4 w-4 text-slate-200"}
-				/>
-			))}
+		<div className="flex items-center gap-0.5">
+			{Array.from({ length: 5 }).map((_, index) => {
+				const fill = Math.min(1, Math.max(0, rating - index));
+				return (
+					<div key={index} className={`relative ${size}`}>
+						<Star className={`${size} text-slate-200`} />
+						<div className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
+							<Star className={`${size} fill-current text-sky-500`} />
+						</div>
+					</div>
+				);
+			})}
 		</div>
 	);
 }
@@ -178,7 +179,7 @@ export default function HotelDetailsPage() {
 									<span className="text-slate-300">|</span>
 									<span>{hotelData.reviewsCount} reviews</span>
 								</div>
-								<StarRow rating={5} />
+								<StarRow rating={hotelData.rating} />
 								<p className="mt-4 max-w-4xl text-sm leading-7 text-slate-500 sm:text-[15px]">
 									{hotelData.description}
 								</p>
@@ -264,18 +265,18 @@ export default function HotelDetailsPage() {
 					<div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] sm:p-7">
 						<SectionTitle eyebrow="Guest Reviews" title="Loved by guests" />
 
-						<div className="mt-4 grid gap-4 lg:grid-cols-[160px_1fr]">
-							<div>
+						<div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+							<div className="flex flex-col items-center text-center">
 								<p className="text-5xl font-semibold tracking-tight text-slate-900">4.8</p>
-								<div className="mt-2 flex items-center gap-1">
-									{Array.from({ length: 5 }).map((_, index) => (
-										<Star key={index} className="h-5 w-5 fill-current text-sky-500" />
-									))}
+								<div className="mt-2">
+									<StarRow rating={4.8} size="h-5 w-5" />
 								</div>
-								<p className="mt-2 text-sm text-slate-500">Based on {hotelData.reviewsCount} reviews</p>
+								<p className="mt-1.5 text-sm text-slate-500">Based on {hotelData.reviewsCount} reviews</p>
 							</div>
 
-							<div className="space-y-1.5">
+							<div className="hidden h-16 w-px bg-slate-200 sm:block" />
+
+							<div className="w-full max-w-md flex-1">
 								{hotelData.reviewMetrics.map((metric) => (
 									<MetricBar key={metric.label} label={metric.label} value={metric.value} />
 								))}
